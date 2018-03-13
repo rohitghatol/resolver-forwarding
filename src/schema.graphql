@@ -1,0 +1,9 @@
+# import Post, PostWhereInput, PostOrderByInput, PostCreateInput from "./generated/prisma.graphql"
+
+type Query {
+  level1s(where: Level1WhereInput, orderBy: Level1OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Level1]!
+}
+
+type Mutation {
+  createLevel1(data: Level1CreateInput!): Level1!
+}

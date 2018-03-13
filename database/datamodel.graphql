@@ -1,0 +1,57 @@
+type Level1 { 
+  id: ID! @unique
+  name: String!
+  description: String
+  active: Boolean @default(value: "true")
+  level2s: [Level2!]!
+}
+
+type Level2 { 
+  id: ID! @unique
+  name: String!
+  description: String
+  active: Boolean @default(value: "true")
+
+  level1: Level1
+  level3s: [Level3!]! @relation(name: "Level2Level3s", onDelete: CASCADE)
+  level4s: [Level4!]! @relation(name: "Level2Level4s")
+}
+
+type Level3 { 
+  id: ID! @unique
+  name: String!
+  description: String
+  active: Boolean @default(value: "true")
+
+  level2: Level2!
+  level5: [Level5!]! @relation(name: "Level5s")
+}
+
+type Level4 { 
+  id: ID! @unique
+  name: String!
+  description: String
+  active: Boolean @default(value: "true")
+  level2: Level2! @relation(name: "Level2Level4s")
+  level5: [Level5!]!
+}
+
+type Level5 { 
+  id: ID! @unique
+  name: String!
+  description: String
+  active: Boolean @default(value: "true")
+
+  level6: [Level6!]!
+
+  level4: Level4!
+
+  original: Level3 @relation(name: "Level5s")
+}
+
+type Level6 {
+  id: ID! @unique
+  name: String!
+  description: String
+  active: Boolean @default(value: "true")
+}
