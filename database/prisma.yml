@@ -16,6 +16,8 @@ datamodel: datamodel.graphql
 # (this is why you're passing it to the `Prisma` constructor).
 secret: mysecret123
 
+seed:
+  import: seed.graphql
 # The cluster your service is deployed to. Cluster information (such as
 # host and cluster secret) are stored in `~/.prisma/config.yml`.
-cluster: local
+cluster: centric/design-board-dev

@@ -1,0 +1,33 @@
+{
+  level1s {
+    name
+    description
+    active
+    children {
+      name
+      description
+      active
+      children {
+        name
+        description
+        active
+        children {
+          name
+          description
+          active
+          children {
+            name
+            description
+            active
+            children {
+              name
+              description
+              active
+
+            }
+          }
+        }
+      }
+    }
+  }
+}

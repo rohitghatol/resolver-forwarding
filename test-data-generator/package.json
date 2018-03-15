@@ -1,0 +1,12 @@
+{
+  "name": "test-data-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "handlebars": "^4.0.11"
+  }
+}

@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "graphql-cli": "2.12.4",
+    "loadtest": "^2.3.0",
     "npm-run-all": "4.1.2",
     "prisma": "1.0.8"
   },

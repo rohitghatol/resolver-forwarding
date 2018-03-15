@@ -1,0 +1,71 @@
+mutation {
+
+{{#level1}}
+    {{name}}: createLevel1(
+            data:{
+                   name: "{{name}}",
+                   description: "level1",
+                   active: {{active}},
+                   children: {
+                       create: [
+                            {{#children}}
+                            {
+                                name: "{{name}}",
+                                description: "level2",
+                                active: {{active}},
+                                children: {
+                                   create: [
+                                       {{#children}}
+                                       {
+                                           name: "{{name}}",
+                                           description: "level3",
+                                           active: {{active}},
+                                           children: {
+                                               create: [
+                                                  {{#children}}
+                                                  {
+                                                     name: "{{name}}",
+                                                     description: "level4",
+                                                     active: {{active}},
+                                                     children: {
+                                                         create: [
+                                                            {{#children}}
+                                                            {
+                                                               name: "{{name}}",
+                                                               description: "level5",
+                                                               active: {{active}},
+                                                               children: {
+                                                                   create: [{
+                                                                       name: "{{name}}",
+                                                                       description: "level6",
+                                                                       active: {{active}},
+                                                                   }]
+                                                               }
+                                                            }
+                                                            {{/children}}
+                                                         ]
+                                                     }
+
+                                                  }
+                                                  {{/children}}
+                                               ]
+                                           }
+                                       }
+                                       {{/children}}
+                                   ]
+                                }
+                            }
+                            {{/children}}
+                       ]
+                   }
+
+           }){
+            id
+
+    }
+
+{{/level1}}
+
+
+
+}

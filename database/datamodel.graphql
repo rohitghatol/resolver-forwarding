@@ -3,7 +3,7 @@ type Level1 {
   name: String!
   description: String
   active: Boolean @default(value: "true")
-  level2s: [Level2!]!
+  children: [Level2!]!
 }
 
 type Level2 { 
@@ -12,9 +12,8 @@ type Level2 {
   description: String
   active: Boolean @default(value: "true")
 
-  level1: Level1
-  level3s: [Level3!]! @relation(name: "Level2Level3s", onDelete: CASCADE)
-  level4s: [Level4!]! @relation(name: "Level2Level4s")
+  parent: Level1
+  children: [Level3!]!
 }
 
 type Level3 { 
@@ -23,8 +22,8 @@ type Level3 {
   description: String
   active: Boolean @default(value: "true")
 
-  level2: Level2!
-  level5: [Level5!]! @relation(name: "Level5s")
+  parent: Level2
+  children: [Level4!]!
 }
 
 type Level4 { 
@@ -32,8 +31,9 @@ type Level4 {
   name: String!
   description: String
   active: Boolean @default(value: "true")
-  level2: Level2! @relation(name: "Level2Level4s")
-  level5: [Level5!]!
+
+  parent: Level3
+  children: [Level5!]!
 }
 
 type Level5 { 
@@ -42,11 +42,8 @@ type Level5 {
   description: String
   active: Boolean @default(value: "true")
 
-  level6: [Level6!]!
-
-  level4: Level4!
-
-  original: Level3 @relation(name: "Level5s")
+  parent: Level4
+  children: [Level5!]!
 }
 
 type Level6 {
@@ -54,4 +51,6 @@ type Level6 {
   name: String!
   description: String
   active: Boolean @default(value: "true")
+
+  parent: Level5
 }
