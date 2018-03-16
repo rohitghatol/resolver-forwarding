@@ -3,7 +3,10 @@ type Level1 {
   name: String!
   description: String
   active: Boolean @default(value: "true")
+
   children: [Level2!]!
+
+  comments: [Comment!]!
 }
 
 type Level2 { 
@@ -14,6 +17,8 @@ type Level2 {
 
   parent: Level1
   children: [Level3!]!
+
+  comments: [Comment!]!
 }
 
 type Level3 { 
@@ -24,6 +29,8 @@ type Level3 {
 
   parent: Level2
   children: [Level4!]!
+
+  comments: [Comment!]!
 }
 
 type Level4 { 
@@ -34,6 +41,8 @@ type Level4 {
 
   parent: Level3
   children: [Level5!]!
+
+  comments: [Comment!]!
 }
 
 type Level5 { 
@@ -44,6 +53,8 @@ type Level5 {
 
   parent: Level4
   children: [Level5!]!
+
+  comments: [Comment!]!
 }
 
 type Level6 {
@@ -53,4 +64,15 @@ type Level6 {
   active: Boolean @default(value: "true")
 
   parent: Level5
+
+  comments: [Comment!]!
+}
+
+type Comment {
+  id: ID! @unique
+  name: String!
+  description: String
+  active: Boolean @default(value: "true")
+
+  comments: [Comment!]!
 }

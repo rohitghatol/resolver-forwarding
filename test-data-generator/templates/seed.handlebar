@@ -6,6 +6,17 @@ mutation {
                    name: "{{name}}",
                    description: "level1",
                    active: {{active}},
+                   comments: {
+                       create: [
+                            {{#comments}}
+                            {
+                              name: "{{name}}",
+                              description: "level2",
+                              active: {{active}},
+                            }
+                            {{/comments}}
+                       ]
+                   },
                    children: {
                        create: [
                             {{#children}}
@@ -13,6 +24,17 @@ mutation {
                                 name: "{{name}}",
                                 description: "level2",
                                 active: {{active}},
+                                comments: {
+                                   create: [
+                                        {{#comments}}
+                                        {
+                                          name: "{{name}}",
+                                          description: "level2",
+                                          active: {{active}},
+                                        }
+                                        {{/comments}}
+                                   ]
+                                },
                                 children: {
                                    create: [
                                        {{#children}}
@@ -20,6 +42,17 @@ mutation {
                                            name: "{{name}}",
                                            description: "level3",
                                            active: {{active}},
+                                           comments: {
+                                              create: [
+                                                  {{#comments}}
+                                                  {
+                                                     name: "{{name}}",
+                                                     description: "level2",
+                                                     active: {{active}},
+                                                  }
+                                                  {{/comments}}
+                                              ]
+                                           },
                                            children: {
                                                create: [
                                                   {{#children}}
@@ -27,6 +60,17 @@ mutation {
                                                      name: "{{name}}",
                                                      description: "level4",
                                                      active: {{active}},
+                                                     comments: {
+                                                         create: [
+                                                            {{#comments}}
+                                                            {
+                                                              name: "{{name}}",
+                                                              description: "level2",
+                                                              active: {{active}},
+                                                            }
+                                                            {{/comments}}
+                                                         ]
+                                                     },
                                                      children: {
                                                          create: [
                                                             {{#children}}
@@ -34,11 +78,33 @@ mutation {
                                                                name: "{{name}}",
                                                                description: "level5",
                                                                active: {{active}},
+                                                               comments: {
+                                                                  create: [
+                                                                     {{#comments}}
+                                                                     {
+                                                                       name: "{{name}}",
+                                                                       description: "level2",
+                                                                       active: {{active}},
+                                                                     }
+                                                                     {{/comments}}
+                                                                  ]
+                                                               },
                                                                children: {
                                                                    create: [{
                                                                        name: "{{name}}",
                                                                        description: "level6",
                                                                        active: {{active}},
+                                                                       comments: {
+                                                                         create: [
+                                                                            {{#comments}}
+                                                                            {
+                                                                              name: "{{name}}",
+                                                                              description: "level2",
+                                                                              active: {{active}},
+                                                                            }
+                                                                            {{/comments}}
+                                                                         ]
+                                                                       }
                                                                    }]
                                                                }
                                                             }

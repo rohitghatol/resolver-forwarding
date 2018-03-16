@@ -5,12 +5,21 @@
 # Model Types
 #
 
+type Comment implements Node {
+  id: ID!
+  name: String!
+  description: String
+  active: Boolean
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
+}
+
 type Level1 implements Node {
   id: ID!
   name: String!
   description: String
   active: Boolean
   children(where: Level2WhereInput, orderBy: Level2OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Level2!]
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
 }
 
 type Level2 implements Node {
@@ -20,6 +29,7 @@ type Level2 implements Node {
   active: Boolean
   parent(where: Level1WhereInput): Level1
   children(where: Level3WhereInput, orderBy: Level3OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Level3!]
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
 }
 
 type Level3 implements Node {
@@ -29,6 +39,7 @@ type Level3 implements Node {
   active: Boolean
   parent(where: Level2WhereInput): Level2
   children(where: Level4WhereInput, orderBy: Level4OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Level4!]
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
 }
 
 type Level4 implements Node {
@@ -38,6 +49,7 @@ type Level4 implements Node {
   active: Boolean
   parent(where: Level3WhereInput): Level3
   children(where: Level5WhereInput, orderBy: Level5OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Level5!]
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
 }
 
 type Level5 implements Node {
@@ -47,6 +59,7 @@ type Level5 implements Node {
   active: Boolean
   parent(where: Level4WhereInput): Level4
   children(where: Level5WhereInput, orderBy: Level5OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Level5!]
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
 }
 
 type Level6 implements Node {
@@ -55,12 +68,17 @@ type Level6 implements Node {
   description: String
   active: Boolean
   parent(where: Level5WhereInput): Level5
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
 }
 
 
 #
 # Other Types
 #
+
+type AggregateComment {
+  count: Int!
+}
 
 type AggregateLevel1 {
   count: Int!
@@ -96,6 +114,357 @@ type BatchPayload {
 """
 A connection to a list of items.
 """
+type CommentConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  A list of edges.
+  """
+  edges: [CommentEdge]!
+  aggregate: AggregateComment!
+}
+
+input CommentCreateInput {
+  name: String!
+  description: String
+  active: Boolean
+  comments: CommentCreateManyWithoutCommentsInput
+}
+
+input CommentCreateManyInput {
+  create: [CommentCreateInput!]
+  connect: [CommentWhereUniqueInput!]
+}
+
+input CommentCreateManyWithoutCommentsInput {
+  create: [CommentCreateWithoutCommentsInput!]
+  connect: [CommentWhereUniqueInput!]
+}
+
+input CommentCreateWithoutCommentsInput {
+  name: String!
+  description: String
+  active: Boolean
+}
+
+"""
+An edge in a connection.
+"""
+type CommentEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Comment!
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum CommentOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  description_ASC
+  description_DESC
+  active_ASC
+  active_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type CommentPreviousValues {
+  id: ID!
+  name: String!
+  description: String
+  active: Boolean
+}
+
+type CommentSubscriptionPayload {
+  mutation: MutationType!
+  node: Comment
+  updatedFields: [String!]
+  previousValues: CommentPreviousValues
+}
+
+input CommentSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [CommentSubscriptionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [CommentSubscriptionWhereInput!]
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: CommentWhereInput
+}
+
+input CommentUpdateDataInput {
+  name: String
+  description: String
+  active: Boolean
+  comments: CommentUpdateManyWithoutCommentsInput
+}
+
+input CommentUpdateInput {
+  name: String
+  description: String
+  active: Boolean
+  comments: CommentUpdateManyWithoutCommentsInput
+}
+
+input CommentUpdateManyInput {
+  create: [CommentCreateInput!]
+  connect: [CommentWhereUniqueInput!]
+  disconnect: [CommentWhereUniqueInput!]
+  delete: [CommentWhereUniqueInput!]
+  update: [CommentUpdateNestedInput!]
+  upsert: [CommentUpsertNestedInput!]
+}
+
+input CommentUpdateManyWithoutCommentsInput {
+  create: [CommentCreateWithoutCommentsInput!]
+  connect: [CommentWhereUniqueInput!]
+  disconnect: [CommentWhereUniqueInput!]
+  delete: [CommentWhereUniqueInput!]
+  update: [CommentUpdateWithoutCommentsInput!]
+  upsert: [CommentUpsertWithoutCommentsInput!]
+}
+
+input CommentUpdateNestedInput {
+  where: CommentWhereUniqueInput!
+  data: CommentUpdateDataInput!
+}
+
+input CommentUpdateWithoutCommentsDataInput {
+  name: String
+  description: String
+  active: Boolean
+}
+
+input CommentUpdateWithoutCommentsInput {
+  where: CommentWhereUniqueInput!
+  data: CommentUpdateWithoutCommentsDataInput!
+}
+
+input CommentUpsertNestedInput {
+  where: CommentWhereUniqueInput!
+  update: CommentUpdateDataInput!
+  create: CommentCreateInput!
+}
+
+input CommentUpsertWithoutCommentsInput {
+  where: CommentWhereUniqueInput!
+  update: CommentUpdateWithoutCommentsDataInput!
+  create: CommentCreateWithoutCommentsInput!
+}
+
+input CommentWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [CommentWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [CommentWhereInput!]
+  id: ID
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  name: String
+  """
+  All values that are not equal to given value.
+  """
+  name_not: String
+  """
+  All values that are contained in given list.
+  """
+  name_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  name_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  name_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  name_lte: String
+  """
+  All values greater than the given value.
+  """
+  name_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  name_gte: String
+  """
+  All values containing the given string.
+  """
+  name_contains: String
+  """
+  All values not containing the given string.
+  """
+  name_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  name_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  name_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  name_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  name_not_ends_with: String
+  description: String
+  """
+  All values that are not equal to given value.
+  """
+  description_not: String
+  """
+  All values that are contained in given list.
+  """
+  description_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  description_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  description_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  description_lte: String
+  """
+  All values greater than the given value.
+  """
+  description_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  description_gte: String
+  """
+  All values containing the given string.
+  """
+  description_contains: String
+  """
+  All values not containing the given string.
+  """
+  description_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  description_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  description_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  description_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  description_not_ends_with: String
+  active: Boolean
+  """
+  All values that are not equal to given value.
+  """
+  active_not: Boolean
+  comments_every: CommentWhereInput
+  comments_some: CommentWhereInput
+  comments_none: CommentWhereInput
+}
+
+input CommentWhereUniqueInput {
+  id: ID
+}
+
+"""
+A connection to a list of items.
+"""
 type Level1Connection {
   """
   Information to aid in pagination.
@@ -113,6 +482,7 @@ input Level1CreateInput {
   description: String
   active: Boolean
   children: Level2CreateManyWithoutParentInput
+  comments: CommentCreateManyInput
 }
 
 input Level1CreateOneWithoutChildrenInput {
@@ -124,6 +494,7 @@ input Level1CreateWithoutChildrenInput {
   name: String!
   description: String
   active: Boolean
+  comments: CommentCreateManyInput
 }
 
 """
@@ -202,6 +573,7 @@ input Level1UpdateInput {
   description: String
   active: Boolean
   children: Level2UpdateManyWithoutParentInput
+  comments: CommentUpdateManyInput
 }
 
 input Level1UpdateOneWithoutChildrenInput {
@@ -217,6 +589,7 @@ input Level1UpdateWithoutChildrenDataInput {
   name: String
   description: String
   active: Boolean
+  comments: CommentUpdateManyInput
 }
 
 input Level1UpdateWithoutChildrenInput {
@@ -406,6 +779,9 @@ input Level1WhereInput {
   children_every: Level2WhereInput
   children_some: Level2WhereInput
   children_none: Level2WhereInput
+  comments_every: CommentWhereInput
+  comments_some: CommentWhereInput
+  comments_none: CommentWhereInput
 }
 
 input Level1WhereUniqueInput {
@@ -433,6 +809,7 @@ input Level2CreateInput {
   active: Boolean
   parent: Level1CreateOneWithoutChildrenInput
   children: Level3CreateManyWithoutParentInput
+  comments: CommentCreateManyInput
 }
 
 input Level2CreateManyWithoutParentInput {
@@ -450,6 +827,7 @@ input Level2CreateWithoutChildrenInput {
   description: String
   active: Boolean
   parent: Level1CreateOneWithoutChildrenInput
+  comments: CommentCreateManyInput
 }
 
 input Level2CreateWithoutParentInput {
@@ -457,6 +835,7 @@ input Level2CreateWithoutParentInput {
   description: String
   active: Boolean
   children: Level3CreateManyWithoutParentInput
+  comments: CommentCreateManyInput
 }
 
 """
@@ -536,6 +915,7 @@ input Level2UpdateInput {
   active: Boolean
   parent: Level1UpdateOneWithoutChildrenInput
   children: Level3UpdateManyWithoutParentInput
+  comments: CommentUpdateManyInput
 }
 
 input Level2UpdateManyWithoutParentInput {
@@ -561,6 +941,7 @@ input Level2UpdateWithoutChildrenDataInput {
   description: String
   active: Boolean
   parent: Level1UpdateOneWithoutChildrenInput
+  comments: CommentUpdateManyInput
 }
 
 input Level2UpdateWithoutChildrenInput {
@@ -573,6 +954,7 @@ input Level2UpdateWithoutParentDataInput {
   description: String
   active: Boolean
   children: Level3UpdateManyWithoutParentInput
+  comments: CommentUpdateManyInput
 }
 
 input Level2UpdateWithoutParentInput {
@@ -769,6 +1151,9 @@ input Level2WhereInput {
   children_every: Level3WhereInput
   children_some: Level3WhereInput
   children_none: Level3WhereInput
+  comments_every: CommentWhereInput
+  comments_some: CommentWhereInput
+  comments_none: CommentWhereInput
 }
 
 input Level2WhereUniqueInput {
@@ -796,6 +1181,7 @@ input Level3CreateInput {
   active: Boolean
   parent: Level2CreateOneWithoutChildrenInput
   children: Level4CreateManyWithoutParentInput
+  comments: CommentCreateManyInput
 }
 
 input Level3CreateManyWithoutParentInput {
@@ -813,6 +1199,7 @@ input Level3CreateWithoutChildrenInput {
   description: String
   active: Boolean
   parent: Level2CreateOneWithoutChildrenInput
+  comments: CommentCreateManyInput
 }
 
 input Level3CreateWithoutParentInput {
@@ -820,6 +1207,7 @@ input Level3CreateWithoutParentInput {
   description: String
   active: Boolean
   children: Level4CreateManyWithoutParentInput
+  comments: CommentCreateManyInput
 }
 
 """
@@ -899,6 +1287,7 @@ input Level3UpdateInput {
   active: Boolean
   parent: Level2UpdateOneWithoutChildrenInput
   children: Level4UpdateManyWithoutParentInput
+  comments: CommentUpdateManyInput
 }
 
 input Level3UpdateManyWithoutParentInput {
@@ -924,6 +1313,7 @@ input Level3UpdateWithoutChildrenDataInput {
   description: String
   active: Boolean
   parent: Level2UpdateOneWithoutChildrenInput
+  comments: CommentUpdateManyInput
 }
 
 input Level3UpdateWithoutChildrenInput {
@@ -936,6 +1326,7 @@ input Level3UpdateWithoutParentDataInput {
   description: String
   active: Boolean
   children: Level4UpdateManyWithoutParentInput
+  comments: CommentUpdateManyInput
 }
 
 input Level3UpdateWithoutParentInput {
@@ -1132,6 +1523,9 @@ input Level3WhereInput {
   children_every: Level4WhereInput
   children_some: Level4WhereInput
   children_none: Level4WhereInput
+  comments_every: CommentWhereInput
+  comments_some: CommentWhereInput
+  comments_none: CommentWhereInput
 }
 
 input Level3WhereUniqueInput {
@@ -1159,6 +1553,7 @@ input Level4CreateInput {
   active: Boolean
   parent: Level3CreateOneWithoutChildrenInput
   children: Level5CreateManyWithoutParentInput
+  comments: CommentCreateManyInput
 }
 
 input Level4CreateManyWithoutParentInput {
@@ -1176,6 +1571,7 @@ input Level4CreateWithoutChildrenInput {
   description: String
   active: Boolean
   parent: Level3CreateOneWithoutChildrenInput
+  comments: CommentCreateManyInput
 }
 
 input Level4CreateWithoutParentInput {
@@ -1183,6 +1579,7 @@ input Level4CreateWithoutParentInput {
   description: String
   active: Boolean
   children: Level5CreateManyWithoutParentInput
+  comments: CommentCreateManyInput
 }
 
 """
@@ -1262,6 +1659,7 @@ input Level4UpdateInput {
   active: Boolean
   parent: Level3UpdateOneWithoutChildrenInput
   children: Level5UpdateManyWithoutParentInput
+  comments: CommentUpdateManyInput
 }
 
 input Level4UpdateManyWithoutParentInput {
@@ -1287,6 +1685,7 @@ input Level4UpdateWithoutChildrenDataInput {
   description: String
   active: Boolean
   parent: Level3UpdateOneWithoutChildrenInput
+  comments: CommentUpdateManyInput
 }
 
 input Level4UpdateWithoutChildrenInput {
@@ -1299,6 +1698,7 @@ input Level4UpdateWithoutParentDataInput {
   description: String
   active: Boolean
   children: Level5UpdateManyWithoutParentInput
+  comments: CommentUpdateManyInput
 }
 
 input Level4UpdateWithoutParentInput {
@@ -1495,6 +1895,9 @@ input Level4WhereInput {
   children_every: Level5WhereInput
   children_some: Level5WhereInput
   children_none: Level5WhereInput
+  comments_every: CommentWhereInput
+  comments_some: CommentWhereInput
+  comments_none: CommentWhereInput
 }
 
 input Level4WhereUniqueInput {
@@ -1522,6 +1925,7 @@ input Level5CreateInput {
   active: Boolean
   parent: Level4CreateOneWithoutChildrenInput
   children: Level5CreateManyWithoutChildrenInput
+  comments: CommentCreateManyInput
 }
 
 input Level5CreateManyWithoutChildrenInput {
@@ -1544,6 +1948,7 @@ input Level5CreateWithoutChildrenInput {
   description: String
   active: Boolean
   parent: Level4CreateOneWithoutChildrenInput
+  comments: CommentCreateManyInput
 }
 
 input Level5CreateWithoutParentInput {
@@ -1551,6 +1956,7 @@ input Level5CreateWithoutParentInput {
   description: String
   active: Boolean
   children: Level5CreateManyWithoutChildrenInput
+  comments: CommentCreateManyInput
 }
 
 """
@@ -1630,6 +2036,7 @@ input Level5UpdateDataInput {
   active: Boolean
   parent: Level4UpdateOneWithoutChildrenInput
   children: Level5UpdateManyWithoutChildrenInput
+  comments: CommentUpdateManyInput
 }
 
 input Level5UpdateInput {
@@ -1638,6 +2045,7 @@ input Level5UpdateInput {
   active: Boolean
   parent: Level4UpdateOneWithoutChildrenInput
   children: Level5UpdateManyWithoutChildrenInput
+  comments: CommentUpdateManyInput
 }
 
 input Level5UpdateManyWithoutChildrenInput {
@@ -1677,6 +2085,7 @@ input Level5UpdateWithoutChildrenDataInput {
   description: String
   active: Boolean
   parent: Level4UpdateOneWithoutChildrenInput
+  comments: CommentUpdateManyInput
 }
 
 input Level5UpdateWithoutChildrenInput {
@@ -1689,6 +2098,7 @@ input Level5UpdateWithoutParentDataInput {
   description: String
   active: Boolean
   children: Level5UpdateManyWithoutChildrenInput
+  comments: CommentUpdateManyInput
 }
 
 input Level5UpdateWithoutParentInput {
@@ -1891,6 +2301,9 @@ input Level5WhereInput {
   children_every: Level5WhereInput
   children_some: Level5WhereInput
   children_none: Level5WhereInput
+  comments_every: CommentWhereInput
+  comments_some: CommentWhereInput
+  comments_none: CommentWhereInput
 }
 
 input Level5WhereUniqueInput {
@@ -1917,6 +2330,7 @@ input Level6CreateInput {
   description: String
   active: Boolean
   parent: Level5CreateOneInput
+  comments: CommentCreateManyInput
 }
 
 """
@@ -1995,6 +2409,7 @@ input Level6UpdateInput {
   description: String
   active: Boolean
   parent: Level5UpdateOneInput
+  comments: CommentUpdateManyInput
 }
 
 input Level6WhereInput {
@@ -2171,6 +2586,9 @@ input Level6WhereInput {
   """
   active_not: Boolean
   parent: Level5WhereInput
+  comments_every: CommentWhereInput
+  comments_some: CommentWhereInput
+  comments_none: CommentWhereInput
 }
 
 input Level6WhereUniqueInput {
@@ -2190,36 +2608,42 @@ type Mutation {
   createLevel4(data: Level4CreateInput!): Level4!
   createLevel5(data: Level5CreateInput!): Level5!
   createLevel6(data: Level6CreateInput!): Level6!
+  createComment(data: CommentCreateInput!): Comment!
   updateLevel1(data: Level1UpdateInput!, where: Level1WhereUniqueInput!): Level1
   updateLevel2(data: Level2UpdateInput!, where: Level2WhereUniqueInput!): Level2
   updateLevel3(data: Level3UpdateInput!, where: Level3WhereUniqueInput!): Level3
   updateLevel4(data: Level4UpdateInput!, where: Level4WhereUniqueInput!): Level4
   updateLevel5(data: Level5UpdateInput!, where: Level5WhereUniqueInput!): Level5
   updateLevel6(data: Level6UpdateInput!, where: Level6WhereUniqueInput!): Level6
+  updateComment(data: CommentUpdateInput!, where: CommentWhereUniqueInput!): Comment
   deleteLevel1(where: Level1WhereUniqueInput!): Level1
   deleteLevel2(where: Level2WhereUniqueInput!): Level2
   deleteLevel3(where: Level3WhereUniqueInput!): Level3
   deleteLevel4(where: Level4WhereUniqueInput!): Level4
   deleteLevel5(where: Level5WhereUniqueInput!): Level5
   deleteLevel6(where: Level6WhereUniqueInput!): Level6
+  deleteComment(where: CommentWhereUniqueInput!): Comment
   upsertLevel1(where: Level1WhereUniqueInput!, create: Level1CreateInput!, update: Level1UpdateInput!): Level1!
   upsertLevel2(where: Level2WhereUniqueInput!, create: Level2CreateInput!, update: Level2UpdateInput!): Level2!
   upsertLevel3(where: Level3WhereUniqueInput!, create: Level3CreateInput!, update: Level3UpdateInput!): Level3!
   upsertLevel4(where: Level4WhereUniqueInput!, create: Level4CreateInput!, update: Level4UpdateInput!): Level4!
   upsertLevel5(where: Level5WhereUniqueInput!, create: Level5CreateInput!, update: Level5UpdateInput!): Level5!
   upsertLevel6(where: Level6WhereUniqueInput!, create: Level6CreateInput!, update: Level6UpdateInput!): Level6!
+  upsertComment(where: CommentWhereUniqueInput!, create: CommentCreateInput!, update: CommentUpdateInput!): Comment!
   updateManyLevel1s(data: Level1UpdateInput!, where: Level1WhereInput!): BatchPayload!
   updateManyLevel2s(data: Level2UpdateInput!, where: Level2WhereInput!): BatchPayload!
   updateManyLevel3s(data: Level3UpdateInput!, where: Level3WhereInput!): BatchPayload!
   updateManyLevel4s(data: Level4UpdateInput!, where: Level4WhereInput!): BatchPayload!
   updateManyLevel5s(data: Level5UpdateInput!, where: Level5WhereInput!): BatchPayload!
   updateManyLevel6s(data: Level6UpdateInput!, where: Level6WhereInput!): BatchPayload!
+  updateManyComments(data: CommentUpdateInput!, where: CommentWhereInput!): BatchPayload!
   deleteManyLevel1s(where: Level1WhereInput!): BatchPayload!
   deleteManyLevel2s(where: Level2WhereInput!): BatchPayload!
   deleteManyLevel3s(where: Level3WhereInput!): BatchPayload!
   deleteManyLevel4s(where: Level4WhereInput!): BatchPayload!
   deleteManyLevel5s(where: Level5WhereInput!): BatchPayload!
   deleteManyLevel6s(where: Level6WhereInput!): BatchPayload!
+  deleteManyComments(where: CommentWhereInput!): BatchPayload!
 }
 
 enum MutationType {
@@ -2267,18 +2691,21 @@ type Query {
   level4s(where: Level4WhereInput, orderBy: Level4OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Level4]!
   level5s(where: Level5WhereInput, orderBy: Level5OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Level5]!
   level6s(where: Level6WhereInput, orderBy: Level6OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Level6]!
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
   level1(where: Level1WhereUniqueInput!): Level1
   level2(where: Level2WhereUniqueInput!): Level2
   level3(where: Level3WhereUniqueInput!): Level3
   level4(where: Level4WhereUniqueInput!): Level4
   level5(where: Level5WhereUniqueInput!): Level5
   level6(where: Level6WhereUniqueInput!): Level6
+  comment(where: CommentWhereUniqueInput!): Comment
   level1sConnection(where: Level1WhereInput, orderBy: Level1OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): Level1Connection!
   level2sConnection(where: Level2WhereInput, orderBy: Level2OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): Level2Connection!
   level3sConnection(where: Level3WhereInput, orderBy: Level3OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): Level3Connection!
   level4sConnection(where: Level4WhereInput, orderBy: Level4OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): Level4Connection!
   level5sConnection(where: Level5WhereInput, orderBy: Level5OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): Level5Connection!
   level6sConnection(where: Level6WhereInput, orderBy: Level6OrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): Level6Connection!
+  commentsConnection(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CommentConnection!
   """
   Fetches an object given its ID
   """
@@ -2295,4 +2722,5 @@ type Subscription {
   level4(where: Level4SubscriptionWhereInput): Level4SubscriptionPayload
   level5(where: Level5SubscriptionWhereInput): Level5SubscriptionPayload
   level6(where: Level6SubscriptionWhereInput): Level6SubscriptionPayload
+  comment(where: CommentSubscriptionWhereInput): CommentSubscriptionPayload
 }
